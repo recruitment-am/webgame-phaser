@@ -22,7 +22,8 @@ export default class Fruit {
 
     const m = 0.15;
 
-    // TODO: 'level' size should be provided from upper level
+    // TODO: instead of using Align (window width/height)
+    //       the size of the map (and its center point) should be defined in Level
     this._x = Align.left + m + Math.random() * (1 - m * 2) * Align.width;
     this._y = Align.top + m + Math.random() * (1 - m * 2) * Align.height;
 
