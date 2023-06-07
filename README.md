@@ -31,3 +31,10 @@ npm install && npm start
 
 - The core of the game logic is its GameLoop, which provides implementation of detecting time passing and updating all subsequent states beneath
 - There are some sub-models created and updated on a tick-base
+
+
+
+#### Controls
+
+Use arrows to move the knight and collect falling fruits.
+Game gets more difficult over time
