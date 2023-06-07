@@ -1,6 +1,6 @@
 import GameScene from '../GameScene';
 import Knight from '../logic/elements/Knight';
-import { AtlasKeys } from '../systems/AtlasKeys';
+import { AtlasKeys } from './AtlasKeys';
 
 const AnimKeys = {
   idle: 'idle',

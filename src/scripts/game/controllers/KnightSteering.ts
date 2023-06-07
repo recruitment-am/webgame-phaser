@@ -1,5 +1,5 @@
 import GameScene from '../GameScene';
-import Knight from './elements/Knight';
+import Knight from '../logic/elements/Knight';
 
 export default class KnightSteering {
   private keyboard;

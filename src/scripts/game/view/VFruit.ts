@@ -1,7 +1,7 @@
 import GameScene from '../GameScene';
 import Fruit from '../logic/elements/Fruit';
 import { LevelEvents } from '../logic/elements/Level';
-import { AtlasKeys } from '../systems/AtlasKeys';
+import { AtlasKeys } from './AtlasKeys';
 
 export default class VFruit extends Phaser.GameObjects.Image {
   readonly sc: GameScene;

@@ -1,8 +1,8 @@
+import KnightSteering from './controllers/KnightSteering';
 import GameLoop from './logic/GameLoop';
-import KnightSteering from './logic/KnightSteering';
 import Align from './systems/Align';
-import { AtlasKeys } from './systems/AtlasKeys';
 import SoundSystem from './systems/SoundSystem';
+import { AtlasKeys } from './view/AtlasKeys';
 import VFruitsFactory from './view/VFruitsFactory';
 import VKnight from './view/VKnight';
 import FadeInFx from './view/fx/FadeInFx';
@@ -36,29 +36,37 @@ export default class GameScene extends Phaser.Scene {
     const floorLayer = this.add.container();
     const fruitLayer = this.add.container();
 
+    // model
     // create game loop with all logic systems
-    this._gameLoop = new GameLoop();
-    this._gameLoop.level.knight.x = Align.centerX;
-    this._gameLoop.level.knight.y = Align.centerY;
+    const gameLoop = new GameLoop();
+    this._gameLoop = gameLoop;
+    gameLoop.level.knight.x = Align.centerX;
+    gameLoop.level.knight.y = Align.centerY;
 
-    // view elements
-    // knight
-    const vKnight = new VKnight(this, this._gameLoop.level.knight);
+    // view
+    // knight's view
+    const vKnight = new VKnight(this, gameLoop.level.knight);
     floorLayer.add(vKnight);
-    new KnightSteering(this, this._gameLoop.level.knight);
 
-    // fruits
     new VFruitsFactory(this, fruitLayer);
 
+    // other systems
     // initialize sounds
     this._sounds = new SoundSystem(this.game, 'sounds');
 
+    this.start();
+  }
+
+  start() {
     // fade in
     new FadeInFx(this);
 
     setTimeout(() => {
       this._gameLoop.start();
     }, 1000);
+
+    // controls
+    new KnightSteering(this, this._gameLoop.level.knight);
   }
 
   update() {
