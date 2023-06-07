@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
-const LoadingContext = createContext<{
+const AppContext = createContext<{
   // loading
   loading: boolean;
   setLoading: (val: boolean) => void;
@@ -10,7 +10,7 @@ const LoadingContext = createContext<{
   setGame: (val: boolean) => void;
 } | null>(null);
 
-export function LoadingProvider({
+export function AppProvider({
   children,
 }: {
   children: React.ReactElement | React.ReactElement[];
@@ -25,21 +25,13 @@ export function LoadingProvider({
 
   return (
     <>
-      <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>
+      <AppContext.Provider value={value}>{children}</AppContext.Provider>
     </>
   );
 }
 
-export function useLoading() {
-  const context = useContext(LoadingContext);
-  if (!context) {
-    throw new Error('useLoading must be used within LoadingProvider');
-  }
-  return context;
-}
-
-export function useIntro() {
-  const context = useContext(LoadingContext);
+export function useApp() {
+  const context = useContext(AppContext);
   if (!context) {
     throw new Error('useLoading must be used within LoadingProvider');
   }

@@ -15,7 +15,11 @@ export default class VFruitsFactory {
 
   private pool?: VFruit[];
 
-  constructor(scene: GameScene, container: Phaser.GameObjects.Container) {
+  constructor(
+    scene: GameScene,
+    layer: Phaser.GameObjects.Container,
+    shadowsLayer?: Phaser.GameObjects.Container
+  ) {
     this.scene = scene;
     const putBackToPool = (fruit: VFruit) => {
       this.pool?.unshift(fruit);
@@ -23,7 +27,11 @@ export default class VFruitsFactory {
 
     const pool = new Array(20).fill(null).map(() => {
       const fruit = new VFruit(scene, putBackToPool);
-      container.add(fruit);
+      layer.add(fruit);
+
+      // put shadows in the dedicated layer
+      (shadowsLayer ?? layer).addAt(fruit.shadow, 0);
+
       return fruit;
     });
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
-import { LoadingProvider } from './splash/SceneContext.tsx';
+import { AppProvider } from './splash/AppContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <LoadingProvider>
+    <AppProvider>
       <App />
-    </LoadingProvider>
+    </AppProvider>
   </React.StrictMode>
 );

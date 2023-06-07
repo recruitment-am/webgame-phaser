@@ -36,16 +36,7 @@ export default class VFruit extends Phaser.GameObjects.Image {
 
     this.setFrame(`fruits/${fruit.fruitType}.png`);
 
-    {
-      // setup up shadow
-      const { _shadow } = this;
-      _shadow.setFrame(`fruits/${fruit.fruitType}.png`);
-      _shadow.scale = this.scale;
-      _shadow.visible = true;
-      _shadow.x = fruit.x;
-      _shadow.y = fruit.y + fruit.z;
-      this.parentContainer.addAt(_shadow, 0);
-    }
+    this.setUpShadow(fruit);
 
     // fade in
     this.visible = true;
@@ -61,6 +52,15 @@ export default class VFruit extends Phaser.GameObjects.Image {
     this.sc.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
 
     this.update();
+  }
+
+  private setUpShadow(fruit: Fruit) {
+    const { _shadow } = this;
+    _shadow.setFrame(`fruits/${fruit.fruitType}.png`);
+    _shadow.scale = this.scale;
+    _shadow.visible = true;
+    _shadow.x = fruit.x;
+    _shadow.y = fruit.y + fruit.z;
   }
 
   private handleFruitRemoved() {
@@ -96,5 +96,9 @@ export default class VFruit extends Phaser.GameObjects.Image {
     this.x = fruit.x;
     this.y = fruit.y - fruit.z;
     this._shadow.alpha = 0.4 - Phaser.Math.Clamp(fruit.z / 800, 0, 0.32);
+  }
+
+  get shadow() {
+    return this._shadow;
   }
 }

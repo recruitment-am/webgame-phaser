@@ -5,20 +5,23 @@ export default class Knight {
   speedX: number = 0;
   speedY: number = 0;
 
-  private maxSpeed: number = 600;
-  private movingInertia: number = 6;
-
   // controlled by user input
   moveY: number = 0;
   moveX: number = 0;
 
-  constructor() {}
+  private maxSpeed: number = 600;
+  private movingInertia: number = 6;
 
   update(delta: number) {
+    // speed-based movement
     this.x += (delta / 1000) * this.speedX;
     this.y += (delta / 1000) * this.speedY;
 
-    this.speedX = (this.speedX * this.movingInertia + this.moveX * this.maxSpeed) / (this.movingInertia + 1);
-    this.speedY = (this.speedY * this.movingInertia + this.moveY * this.maxSpeed) / (this.movingInertia + 1);
+    // inputs have impact on speed change with some easing/inertia
+
+    const inertia = this.movingInertia;
+    // manual LERP with strength defined by 'movingInertia'
+    this.speedX = (this.speedX * inertia + this.moveX * this.maxSpeed) / (inertia + 1);
+    this.speedY = (this.speedY * inertia + this.moveY * this.maxSpeed) / (inertia + 1);
   }
 }

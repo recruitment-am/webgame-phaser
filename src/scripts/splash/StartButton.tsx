@@ -1,8 +1,8 @@
-import { useLoading } from './SceneContext';
+import { useApp } from './AppContext';
 import './StartButton.css';
 
 export default function StartButton(): JSX.Element {
-  const { setGame } = useLoading();
+  const { setGame } = useApp();
 
   function handleClick() {
     setGame(true);
@@ -12,7 +12,7 @@ export default function StartButton(): JSX.Element {
     <div className="relativeWrapper">
       <div className="container">
         <button className="startButton" onClick={handleClick}>
-          START GRY
+          START GAME
         </button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { logAs } from '../systems/Logger';
 import CollisionDetector from './CollisionDetector';
 import LivesCounter from './LivesCounter';
 import PointsCounter from './PointsCounter';
+import { Level1Config } from './config/Level1Config';
 import Level from './elements/Level';
 
 const TICK_DURATION = 16;
@@ -33,7 +34,7 @@ export default class GameLoop {
   private _timeScale = 1;
 
   constructor() {
-    this.level = new Level();
+    this.level = new Level(Level1Config);
     this.collisions = new CollisionDetector(this.level.activeFruits, this.level.knight);
     this.points = new PointsCounter(this);
     this.lives = new LivesCounter(this);

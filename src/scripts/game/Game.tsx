@@ -52,11 +52,12 @@ function createPhaser() {
     gameInstance = game;
     updateDevicePixelRatio();
 
-    // fix: mitigate blinking
+    // fix for background blinking on canvas init
     wrapper.style.display = 'none';
   }
 }
 
+// call resize - cache prev values to limit re-triggering
 let storedCanvasWidth = 0;
 let storedCanvasHeight = 0;
 let storedNativeDPR = 0;

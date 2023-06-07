@@ -33,6 +33,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    const shadowsLayer = this.add.container();
     const floorLayer = this.add.container();
     const fruitLayer = this.add.container();
 
@@ -48,7 +49,7 @@ export default class GameScene extends Phaser.Scene {
     const vKnight = new VKnight(this, gameLoop.level.knight);
     floorLayer.add(vKnight);
 
-    new VFruitsFactory(this, fruitLayer);
+    new VFruitsFactory(this, fruitLayer, shadowsLayer);
 
     // other systems
     // initialize sounds

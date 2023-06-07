@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import './App.css';
 import { Game } from './game/Game';
-import { useLoading } from './splash/SceneContext';
+import { useApp } from './splash/AppContext';
 import Splash from './splash/Splash';
 import StartButton from './splash/StartButton';
 import Throbber from './splash/Throbber';
 
 export default function App(): JSX.Element {
-  const { game, loading, setLoading } = useLoading();
+  const { game, loading, setLoading } = useApp();
 
   useEffect(() => {
     setLoading(true);

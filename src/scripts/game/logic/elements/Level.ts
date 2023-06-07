@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import FruitsGenerator from '../FruitsGenerator';
+import { LevelConfig } from '../config/LevelConfigBase';
 import Fruit from './Fruit';
 import Knight from './Knight';
 
@@ -16,7 +17,7 @@ export default class Level {
   readonly activeFruits;
   readonly fruitsGenerator;
 
-  constructor() {
+  constructor(public readonly config: LevelConfig) {
     this.activeFruits = new Array<Fruit>();
     this.knight = new Knight();
     this.fruitsGenerator = new FruitsGenerator(this);
