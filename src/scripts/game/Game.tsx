@@ -1,6 +1,8 @@
 import 'phaser';
 
 import { useEffect } from 'react';
+import Lives from '../hud/Lives';
+import Score from '../hud/Score';
 import './Game.css';
 import GameScene from './GameScene';
 import Align from './systems/Align';
@@ -146,7 +148,13 @@ export const Game = (): JSX.Element => {
 
   return (
     <>
-      <div id="phaser-wrapper"></div>
+      <div className="relativeWrapper">
+        <div className="hud">
+          <Score />
+          <Lives />
+        </div>
+        <div id="phaser-wrapper"></div>
+      </div>
     </>
   );
 };
