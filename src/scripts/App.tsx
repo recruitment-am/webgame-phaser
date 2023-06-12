@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import './App.css';
+import { useApp } from './AppContext';
 import { Game } from './game/Game';
-import { useApp } from './splash/AppContext';
+import { GameProvider } from './game/GameContext';
 import Splash from './splash/Splash';
 import StartButton from './splash/StartButton';
 import Throbber from './splash/Throbber';
@@ -26,7 +27,11 @@ export default function App(): JSX.Element {
       {!loading && <StartButton />}
       {loading && <Throbber />}
 
-      {game && <Game />}
+      {game && (
+        <GameProvider>
+          <Game />
+        </GameProvider>
+      )}
     </>
   );
 }
