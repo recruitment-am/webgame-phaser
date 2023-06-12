@@ -7,7 +7,8 @@ import { AtlasKeys } from './view/AtlasKeys';
 import VFruitsFactory from './view/VFruitsFactory';
 import VKnight from './view/VKnight';
 import VLevel from './view/VLevel';
-import FadeInFx from './view/fx/FadeInFx';
+import FadeInFx from './view/fx/VFadeInFx';
+import VFruitsOnFloorDecalsFx from './view/fx/VFruitsOnFloorDecalsFx';
 
 export default class GameScene extends Phaser.Scene {
   private _sounds!: SoundSystem;
@@ -54,6 +55,7 @@ export default class GameScene extends Phaser.Scene {
     vLevel.floorLayer.add(vKnight);
 
     new VFruitsFactory(this, vLevel);
+    new VFruitsOnFloorDecalsFx(this);
 
     // other systems
     // initialize sounds

@@ -5,6 +5,10 @@ import { AtlasKeys } from './AtlasKeys';
 import { modelToViewScale } from './VGlobal';
 
 export default class VFruit extends Phaser.GameObjects.Image {
+  static getFrameFor(fruit: Fruit) {
+    return `fruits/${fruit.fruitType}.png`;
+  }
+
   readonly sc: GameScene;
 
   private putBackToPool: (fruit: VFruit) => void;
@@ -57,7 +61,7 @@ export default class VFruit extends Phaser.GameObjects.Image {
 
   private setUpShadow(fruit: Fruit) {
     const { _shadow } = this;
-    _shadow.setFrame(`fruits/${fruit.fruitType}.png`);
+    _shadow.setFrame(VFruit.getFrameFor(fruit));
     _shadow.scale = this.scale;
     _shadow.visible = true;
     _shadow.x = fruit.x * modelToViewScale;
