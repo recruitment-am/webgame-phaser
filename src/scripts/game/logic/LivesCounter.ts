@@ -1,21 +1,27 @@
+import { GameState, gameEvents } from '../GameContext';
 import { logAs } from '../systems/Logger';
 import GameLoop from './GameLoop';
 
 export default class LivesCounter {
-  private _lives = 10;
   get lives() {
     return this._lives;
   }
 
-  constructor(private loop: GameLoop) {}
+  constructor(private loop: GameLoop, private _lives: number = 10) {
+    gameEvents.on('takeLife', ({ state }: { state: GameState }) => {
+      this._lives = state.lives;
+    });
+  }
 
   update() {
     const fruitsFallen = this.loop.collisions.checkForFalls();
     fruitsFallen.forEach((fruit) => {
       fruit.drop();
-      this._lives -= 1;
+      logAs('LivesCounter', `Lost a life. To go: ${this._lives - 1}`);
 
-      logAs('LivesCounter', 'Lost a life. To go: ' + this._lives);
+      this.loop.dispatch({
+        type: 'takeLife',
+      });
     });
 
     if (this._lives <= 0) {

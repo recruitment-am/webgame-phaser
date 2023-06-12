@@ -4,16 +4,17 @@ import { useEffect } from 'react';
 import Lives from '../hud/Lives';
 import Score from '../hud/Score';
 import './Game.css';
+import { GameDispatch, GameState, useGame } from './GameContext';
 import GameScene from './GameScene';
 import Align from './systems/Align';
 import { logger } from './systems/Logger';
 
 // there will be only one "Game" (canvas)
 // store it in the global context then
-let gameInstance!: Phaser.Game;
+export let gameInstance!: Phaser.Game;
 
 let timeoutId: ReturnType<typeof setTimeout> | undefined;
-function createPhaser() {
+function createPhaser(dispatch: GameDispatch, initialState: GameState) {
   // React "Strict.Mode" double-instance mitigation
   clearTimeout(timeoutId);
   timeoutId = setTimeout(doCreate, 100);
@@ -46,13 +47,15 @@ function createPhaser() {
       },
       type: Phaser.WEBGL,
       pixelArt: true,
-      scene: [GameScene],
     };
 
     // store gameInstance as singleton for the app
-    const game = new Phaser.Game(config);
-    gameInstance = game;
+    gameInstance = new Phaser.Game(config);
     updateDevicePixelRatio();
+
+    // create scene manually
+    // pass react's dispatch method
+    gameInstance.scene.add('GameScene', new GameScene(), true, { dispatch, initialState });
 
     // fix for background blinking on canvas init
     wrapper.style.display = 'none';
@@ -136,15 +139,18 @@ export function handleResizeForPhaser() {
 }
 
 export const Game = (): JSX.Element => {
+  // we need to pass the game state's dispatch function down to Phaser
+  const { dispatch, state: initialState } = useGame();
+
   // create phaser instance
   useEffect(() => {
-    createPhaser();
+    createPhaser(dispatch, initialState);
 
     return () => {
       if (!gameInstance) return;
       gameInstance.destroy(true);
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

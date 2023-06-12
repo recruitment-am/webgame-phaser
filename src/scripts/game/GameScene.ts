@@ -1,3 +1,4 @@
+import { GameDispatch, GameState } from './GameContext';
 import KnightSteering from './controllers/KnightSteering';
 import GameLoop from './logic/GameLoop';
 import Align from './systems/Align';
@@ -32,14 +33,14 @@ export default class GameScene extends Phaser.Scene {
     this.load.audioSprite('sounds', 'audio/sounds.json', 'audio/sounds.mp3');
   }
 
-  create() {
+  create(data: { dispatch: GameDispatch; initialState: GameState }) {
     const shadowsLayer = this.add.container();
     const floorLayer = this.add.container();
     const fruitLayer = this.add.container();
 
     // model
     // create game loop with all logic systems
-    const gameLoop = new GameLoop();
+    const gameLoop = new GameLoop(data.initialState, data.dispatch);
     this._gameLoop = gameLoop;
     gameLoop.level.knight.x = Align.centerX;
     gameLoop.level.knight.y = Align.centerY;

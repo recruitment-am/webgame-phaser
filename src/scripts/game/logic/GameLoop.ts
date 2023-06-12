@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3';
+import { GameDispatch, GameState } from '../GameContext';
 import { logAs } from '../systems/Logger';
 import CollisionDetector from './CollisionDetector';
 import LivesCounter from './LivesCounter';
@@ -33,11 +34,14 @@ export default class GameLoop {
 
   private _timeScale = 1;
 
-  constructor() {
+  // params are set/stored on React-end
+  constructor(initialState: GameState, readonly dispatch: GameDispatch) {
     this.level = new Level(Level1Config);
+
     this.collisions = new CollisionDetector(this.level.activeFruits, this.level.knight);
-    this.points = new PointsCounter(this);
-    this.lives = new LivesCounter(this);
+
+    this.points = new PointsCounter(this, initialState.score);
+    this.lives = new LivesCounter(this, initialState.lives);
   }
 
   start() {
