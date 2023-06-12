@@ -6,14 +6,20 @@ import SoundSystem from './systems/SoundSystem';
 import { AtlasKeys } from './view/AtlasKeys';
 import VFruitsFactory from './view/VFruitsFactory';
 import VKnight from './view/VKnight';
+import VLevel from './view/VLevel';
 import FadeInFx from './view/fx/FadeInFx';
 
 export default class GameScene extends Phaser.Scene {
   private _sounds!: SoundSystem;
 
   private _gameLoop!: GameLoop;
+  private _vLevel!: VLevel;
+
   get gameLoop() {
     return this._gameLoop;
+  }
+  get vLevel() {
+    return this._vLevel;
   }
 
   preload() {
@@ -34,29 +40,34 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create(data: { dispatch: GameDispatch; initialState: GameState }) {
-    const shadowsLayer = this.add.container();
-    const floorLayer = this.add.container();
-    const fruitLayer = this.add.container();
-
     // model
     // create game loop with all logic systems
     const gameLoop = new GameLoop(data.initialState, data.dispatch);
     this._gameLoop = gameLoop;
-    gameLoop.level.knight.x = Align.centerX;
-    gameLoop.level.knight.y = Align.centerY;
 
     // view
+    const vLevel = new VLevel(this);
+    this._vLevel = vLevel;
+
     // knight's view
     const vKnight = new VKnight(this, gameLoop.level.knight);
-    floorLayer.add(vKnight);
+    vLevel.floorLayer.add(vKnight);
 
-    new VFruitsFactory(this, fruitLayer, shadowsLayer);
+    new VFruitsFactory(this, vLevel);
 
     // other systems
     // initialize sounds
     this._sounds = new SoundSystem(this.game, 'sounds');
 
     this.start();
+
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.resize, this);
+    this.resize();
+  }
+
+  resize() {
+    const { vLevel } = this;
+    Align.fitScreenAndCenter(vLevel, 0.9, 0.9);
   }
 
   start() {

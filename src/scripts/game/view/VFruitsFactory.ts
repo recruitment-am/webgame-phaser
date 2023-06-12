@@ -4,6 +4,7 @@ import Fruit from '../logic/elements/Fruit';
 import { LevelEvents } from '../logic/elements/Level';
 import { logAs } from '../systems/Logger';
 import VFruit from './VFruit';
+import VLevel from './VLevel';
 
 export const FruitsGeneratorEvents = {
   NewFruit: 'NewFruit',
@@ -15,22 +16,20 @@ export default class VFruitsFactory {
 
   private pool?: VFruit[];
 
-  constructor(
-    scene: GameScene,
-    layer: Phaser.GameObjects.Container,
-    shadowsLayer?: Phaser.GameObjects.Container
-  ) {
+  constructor(scene: GameScene, vLevel: VLevel) {
     this.scene = scene;
     const putBackToPool = (fruit: VFruit) => {
       this.pool?.unshift(fruit);
     };
 
+    const { fruitLayer, shadowsLayer } = vLevel;
+
     const pool = new Array(20).fill(null).map(() => {
       const fruit = new VFruit(scene, putBackToPool);
-      layer.add(fruit);
+      fruitLayer.add(fruit);
 
       // put shadows in the dedicated layer
-      (shadowsLayer ?? layer).addAt(fruit.shadow, 0);
+      (shadowsLayer ?? fruitLayer).addAt(fruit.shadow, 0);
 
       return fruit;
     });

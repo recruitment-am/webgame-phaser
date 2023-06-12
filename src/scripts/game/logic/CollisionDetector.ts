@@ -2,8 +2,8 @@ import Fruit from './elements/Fruit';
 import Knight from './elements/Knight';
 
 export default class CollisionDetector {
-  private static THRESHOLD_X = 40;
-  private static THRESHOLD_Y = 50;
+  private static THRESHOLD_X = 1.3;
+  private static THRESHOLD_Y = 2.8;
 
   constructor(private activeFruits: Fruit[], private knight: Knight) {}
 
@@ -23,7 +23,7 @@ export default class CollisionDetector {
   checkForFalls() {
     return this.activeFruits.filter((fruit) => {
       // reached the floor
-      return fruit.z < 0;
+      return fruit.state === 'falling' && fruit.z < 0;
     });
   }
 }

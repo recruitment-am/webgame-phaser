@@ -1,6 +1,7 @@
 import GameScene from '../GameScene';
 import Knight from '../logic/elements/Knight';
 import { AtlasKeys } from './AtlasKeys';
+import { modelToViewScale } from './VGlobal';
 
 const AnimKeys = {
   idle: 'idle',
@@ -33,6 +34,7 @@ export default class VKnight extends Phaser.GameObjects.Container {
 
     const sprite = sc.add.sprite(0, 0, AtlasKeys.Game);
     this.sprite = sprite;
+    sprite.setOrigin(0.5, 0.7);
 
     Object.values(AnimKeys).forEach((key) => {
       // num of frames per animation
@@ -61,16 +63,16 @@ export default class VKnight extends Phaser.GameObjects.Container {
 
   update() {
     const { knight } = this;
-    this.x = knight.x;
-    this.y = knight.y;
+    this.x = knight.x * modelToViewScale;
+    this.y = knight.y * modelToViewScale;
 
     // animation/view
-    if (Math.abs(knight.speedX) + Math.abs(knight.speedY) < 300) {
+    if (Math.abs(knight.speedX) + Math.abs(knight.speedY) < 7.5) {
       this.switchAnim(AnimKeys.idle);
     } else {
-      if (Math.abs(knight.speedX) > 250) {
+      if (Math.abs(knight.speedX) > 5) {
         this.switchAnim(knight.speedX > 0 ? AnimKeys.runRight : AnimKeys.runLeft);
-      } else if (Math.abs(knight.speedY) > 250) {
+      } else if (Math.abs(knight.speedY) > 5) {
         this.switchAnim(knight.speedY > 0 ? AnimKeys.runDown : AnimKeys.runUp);
       }
     }

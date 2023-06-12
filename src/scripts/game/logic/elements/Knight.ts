@@ -9,8 +9,8 @@ export default class Knight {
   moveY: number = 0;
   moveX: number = 0;
 
-  private maxSpeed: number = 600;
-  private movingInertia: number = 6;
+  private maxSpeed: number = 27;
+  private movingInertia: number = 15;
 
   update(delta: number) {
     // speed-based movement

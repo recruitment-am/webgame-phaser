@@ -2,6 +2,7 @@ import GameScene from '../GameScene';
 import Fruit from '../logic/elements/Fruit';
 import { LevelEvents } from '../logic/elements/Level';
 import { AtlasKeys } from './AtlasKeys';
+import { modelToViewScale } from './VGlobal';
 
 export default class VFruit extends Phaser.GameObjects.Image {
   readonly sc: GameScene;
@@ -59,8 +60,8 @@ export default class VFruit extends Phaser.GameObjects.Image {
     _shadow.setFrame(`fruits/${fruit.fruitType}.png`);
     _shadow.scale = this.scale;
     _shadow.visible = true;
-    _shadow.x = fruit.x;
-    _shadow.y = fruit.y + fruit.z;
+    _shadow.x = fruit.x * modelToViewScale;
+    _shadow.y = fruit.y * modelToViewScale + fruit.z * modelToViewScale;
   }
 
   private handleFruitRemoved() {
@@ -93,9 +94,9 @@ export default class VFruit extends Phaser.GameObjects.Image {
     const { fruit } = this;
     if (!fruit) return;
 
-    this.x = fruit.x;
-    this.y = fruit.y - fruit.z;
-    this._shadow.alpha = 0.4 - Phaser.Math.Clamp(fruit.z / 800, 0, 0.32);
+    this.x = fruit.x * modelToViewScale;
+    this.y = fruit.y * modelToViewScale - fruit.z * modelToViewScale;
+    this._shadow.alpha = 0.4 - Phaser.Math.Clamp(fruit.z / 40, 0, 0.32);
   }
 
   get shadow() {

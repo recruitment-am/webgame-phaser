@@ -1,5 +1,4 @@
 import EventEmitter from 'eventemitter3';
-import Align from '../../systems/Align';
 import { FruitEnumType } from './FruitTypes';
 import Level, { LevelEvents } from './Level';
 
@@ -13,21 +12,20 @@ export default class Fruit {
   private _z = 0;
 
   // pixels per second
-  private _fallingSpeed = 150;
+  private _fallingSpeed = 7.5;
 
   constructor(private level: Level) {}
 
   startFalling(fruitType: FruitEnumType) {
     this._fruitType = fruitType;
 
-    const m = 0.15;
+    const m = 0.05;
 
-    // TODO: instead of using Align (window width/height)
-    //       the size of the map (and its center point) should be defined in Level
-    this._x = Align.left + m + Math.random() * (1 - m * 2) * Align.width;
-    this._y = Align.top + m + Math.random() * (1 - m * 2) * Align.height;
+    const { sizeX, sizeY } = this.level.config;
+    this._x = -sizeX / 2 + m + Math.random() * (1 - m * 2) * sizeX;
+    this._y = -sizeY / 2 + m + Math.random() * (1 - m * 2) * sizeY;
 
-    this._z = Math.random() * 200 + 500;
+    this._z = Math.random() * 5 + 20;
     this._y -= this._z;
 
     this.level.events.emit(LevelEvents.FruitSpawned, this);
