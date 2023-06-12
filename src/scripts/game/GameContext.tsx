@@ -18,7 +18,7 @@ export function GameProvider({
 
   const [state, dispatch] = useReducer(gameReducer, {
     score: 0,
-    lives: parseInt(query.get('lives') ?? '') || 10,
+    lives: parseInt(query.get('lives') ?? '') || 3,
   });
 
   return (

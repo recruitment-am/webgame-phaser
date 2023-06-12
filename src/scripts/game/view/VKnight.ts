@@ -1,5 +1,7 @@
 import GameScene from '../GameScene';
+import { GameLoopEvents } from '../logic/GameLoop';
 import Knight from '../logic/elements/Knight';
+import Align from '../systems/Align';
 import { AtlasKeys } from './AtlasKeys';
 import { modelToViewScale } from './VGlobal';
 
@@ -13,7 +15,7 @@ const AnimKeys = {
   sliceLeft: 'slice left',
   sliceRight: 'slice right',
   sliceUp: 'slice up',
-};
+} as const;
 type AnimKeysEntry = (typeof AnimKeys)[keyof typeof AnimKeys];
 
 const AnimFramesIndex = {
@@ -25,16 +27,24 @@ const AnimFramesIndex = {
 } as Record<string, number | undefined>;
 
 export default class VKnight extends Phaser.GameObjects.Container {
-  readonly sprite: Phaser.GameObjects.Sprite;
+  readonly knightAsset: Phaser.GameObjects.Sprite;
+  readonly shadowAsset: Phaser.GameObjects.Image;
   currentAnimKey: AnimKeysEntry = AnimKeys.idle;
 
   constructor(private readonly sc: GameScene, private readonly knight: Knight) {
     super(sc);
     sc.add.existing(this);
 
-    const sprite = sc.add.sprite(0, 0, AtlasKeys.Game);
-    this.sprite = sprite;
-    sprite.setOrigin(0.5, 0.7);
+    const shadowAsset = sc.add.image(0, 0, AtlasKeys.Game, `fruits/Cookie.png`);
+    this.shadowAsset = shadowAsset;
+    sc.vLevel.shadowsLayer.add(shadowAsset);
+    shadowAsset.setTintFill(0);
+    shadowAsset.alpha = 0.4;
+    shadowAsset.setScale(6, 3);
+
+    const knightAsset = sc.add.sprite(0, 0, AtlasKeys.Game);
+    this.knightAsset = knightAsset;
+    knightAsset.setOrigin(0.5, 0.7);
 
     Object.values(AnimKeys).forEach((key) => {
       // num of frames per animation
@@ -50,21 +60,49 @@ export default class VKnight extends Phaser.GameObjects.Container {
         repeat: -1,
         frameRate: 10,
       };
-      sprite.anims.create(animConfig);
+      knightAsset.anims.create(animConfig);
     });
 
-    sprite.scale = 3;
-    this.add(sprite);
+    knightAsset.scale = 3;
+    this.add(knightAsset);
 
-    this.sprite.play(AnimKeys.idle);
+    this.knightAsset.play(AnimKeys.idle);
 
     sc.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+    this.updateShadowPosition();
+
+    sc.gameLoop.events.once(GameLoopEvents.GameOver, () => {
+      this.switchAnim('idle', { frameRate: 5 });
+
+      // death animation
+      sc.tweens.add({
+        targets: this,
+        props: {
+          y: `-=${Align.height}`,
+        },
+        duration: 5000,
+        ease: Phaser.Math.Easing.Cubic.In,
+      });
+
+      sc.tweens.add({
+        targets: shadowAsset,
+        props: {
+          alpha: 0,
+        },
+        duration: 2000,
+        delay: 1000,
+      });
+    });
   }
 
   update() {
     const { knight } = this;
+    if (this.sc.gameLoop.state !== 'playing') return;
+
     this.x = knight.x * modelToViewScale;
     this.y = knight.y * modelToViewScale;
+
+    this.updateShadowPosition();
 
     // animation/view
     if (Math.abs(knight.speedX) + Math.abs(knight.speedY) < 7.5) {
@@ -78,10 +116,16 @@ export default class VKnight extends Phaser.GameObjects.Container {
     }
   }
 
-  private switchAnim(anim: AnimKeysEntry) {
+  private updateShadowPosition() {
+    const { shadowAsset } = this;
+    shadowAsset.x = this.x;
+    shadowAsset.y = this.y + this.knightAsset.displayHeight * (1 - this.knightAsset.originY);
+  }
+
+  private switchAnim(anim: AnimKeysEntry, opts: { frameRate?: number } = {}) {
     if (this.currentAnimKey === anim) return;
     this.currentAnimKey = anim;
 
-    this.sprite.play(anim);
+    this.knightAsset.play({ key: anim, ...opts });
   }
 }
