@@ -43,7 +43,7 @@ export default class GameScene extends Phaser.Scene {
   create(data: { dispatch: GameDispatch; initialState: GameState }) {
     // model
     // create game loop with all logic systems
-    const gameLoop = new GameLoop(data.initialState, data.dispatch);
+    const gameLoop = new GameLoop(data.dispatch);
     this._gameLoop = gameLoop;
 
     // view

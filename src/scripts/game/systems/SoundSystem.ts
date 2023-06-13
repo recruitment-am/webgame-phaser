@@ -22,7 +22,6 @@ export default class SoundSystem {
   private sounds: { [key: string]: Audio } = {};
   private game: Phaser.Game;
   private key: string;
-  private music?: Phaser.Sound.BaseSound;
 
   sfxVolume = 1;
   musicVolume = 0.15;
@@ -86,10 +85,6 @@ export default class SoundSystem {
     }
 
     return sound;
-  }
-
-  playMusic(key?: string, volume: number = 1) {
-    //TODO
   }
 
   stopSounds() {
