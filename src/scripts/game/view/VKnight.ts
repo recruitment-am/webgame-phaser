@@ -71,27 +71,30 @@ export default class VKnight extends Phaser.GameObjects.Container {
     sc.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     this.updateShadowPosition();
 
-    sc.gameLoop.events.once(GameLoopEvents.GameOver, () => {
-      this.switchAnim('idle', { frameRate: 5 });
+    sc.gameLoop.events.once(GameLoopEvents.GameOver, this.handleGameOver, this);
+  }
 
-      // death animation
-      sc.tweens.add({
-        targets: this,
-        props: {
-          y: `-=${Align.height}`,
-        },
-        duration: 5000,
-        ease: Phaser.Math.Easing.Cubic.In,
-      });
+  private handleGameOver() {
+    const { sc, shadowAsset } = this;
+    this.switchAnim('idle', { frameRate: 5 });
 
-      sc.tweens.add({
-        targets: shadowAsset,
-        props: {
-          alpha: 0,
-        },
-        duration: 2000,
-        delay: 1000,
-      });
+    // death/win animation
+    sc.tweens.add({
+      targets: this,
+      props: {
+        y: `-=${Align.height}`,
+      },
+      duration: 5000,
+      ease: Phaser.Math.Easing.Cubic.In,
+    });
+
+    sc.tweens.add({
+      targets: shadowAsset,
+      props: {
+        alpha: 0,
+      },
+      duration: 2000,
+      delay: 1000,
     });
   }
 
